@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '391852935933',
     projectId: 'newsfeed-33d8d',
     storageBucket: 'newsfeed-33d8d.appspot.com',
+    iosClientId: '391852935933-875n8jme9pp25n3q6vgae6tn683dn8or.apps.googleusercontent.com',
     iosBundleId: 'com.example.newsFeedApp',
   );
 }
