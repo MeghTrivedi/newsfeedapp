@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+        appBar: AppBar(title: const Text('')), body: _inputContent());
+  }
+
+  SingleChildScrollView _inputContent() {
+    return const SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: Column(children: [Text('Sign In')]),
+    );
   }
 }

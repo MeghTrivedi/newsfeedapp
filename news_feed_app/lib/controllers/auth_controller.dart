@@ -1,7 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:news_feed_app/pages/email_verification_page.dart';
 
 import '../config/current_state.dart';
 // import '../models/user.dart' as model;
@@ -101,29 +101,54 @@ class AuthController extends GetxController {
           log(this, 'User email is null');
         } else {
           authState.asOk();
-          Get.offAll(() => const CreateProfilePage());
+          Get.offAll(() => EmailVerificationPage(email: _user?.email));
         }
       }
+    }
+  }
+
+  Future<void> checkIfEmailVerified() async {
+    verifyEmailState.asLoading();
+
+    _user = FirebaseAuth.instance.currentUser;
+    // requires two fetches for some reason
+    // fetch one
+    try {
+      await _user?.reload();
+    } catch (err) {
+      log(this, 'Failed to reload User. Error: $err');
+    }
+    // fetch two
+    try {
+      await _user?.reload();
+    } catch (err) {
+      log(this, 'Failed to reload User. Error: $err');
+    }
+
+    if (_user?.emailVerified ?? false) {
+      verifyEmailState.refresh(StateAs.ok);
+      Get.offAll(() => const CreateProfilePage());
+    } else {
+      log(this, 'Users email is not verified');
+      Get.snackbar('Verify Email',
+          'Please verify your email. It may take a few minutes for the email to be verified. ');
     }
   }
 
   Future<void> signUp() async {
     try {
       if (_confirmPassword.text != _password.text) {
-        throw Exception('Passwords do not match');
+        // throw Exception('Passwords do not match');
+        Get.snackbar('Error', 'The passwords do not match');
+        return;
       }
-      print('1');
       authState.refresh(StateAs.loading);
-      print(_email.text);
-      print(_password.text);
 
       _userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: _email.text, password: _password.text.trim());
-      print('2');
 
       _user = _userCredential?.user ?? FirebaseAuth.instance.currentUser;
-      print('3');
 
       try {
         _user?.reload();
@@ -131,13 +156,10 @@ class AuthController extends GetxController {
       } catch (e) {
         log(this, 'Failed to reload User. Error: $e');
       }
-      print('4');
 
       clearInputFields();
-      print('5');
 
       await init();
-      print('6');
     } catch (err) {
       Get.back();
       log(this, 'Failed to sign up. Error: $err');

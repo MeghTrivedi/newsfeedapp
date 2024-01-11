@@ -1,5 +1,5 @@
 run: 
-	flutter run
+	flutter run 
 
 clean: 
 	flutter clean 

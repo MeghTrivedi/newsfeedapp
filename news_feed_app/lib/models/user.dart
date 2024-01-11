@@ -11,4 +11,13 @@ class User {
       this.name,
       this.userCountry,
       this.categories});
+
+  // Make into JSON object
+  Map<String, dynamic> toJson() => {
+        'uid': uid,
+        'email': email,
+        'name': name,
+        'userCountry': userCountry,
+        'categories': categories,
+      };
 }
