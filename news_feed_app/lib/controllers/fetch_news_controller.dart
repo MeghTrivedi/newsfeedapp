@@ -5,6 +5,7 @@ import 'package:news_feed_app/util/log.dart';
 
 import '../config/current_state.dart';
 import '../models/article.dart';
+import '../util/utils.dart';
 
 class FetchNewsController extends GetxController {
   var news = List<Article>.empty().obs;
@@ -24,8 +25,9 @@ class FetchNewsController extends GetxController {
     }
     try {
       currentState.refresh(StateAs.loading);
-      var fetchedNews =
-          await newsQueries.fetch(category, 'ca', 'top-headlines', page.value);
+      String countryCode = getCountryCode(User.me?.userCountry ?? '');
+      var fetchedNews = await newsQueries.fetch(
+          category, countryCode, 'top-headlines', page.value);
       if (fetchedNews != null) {
         news.clear(); // clear old news.
         news.addAll(fetchedNews);

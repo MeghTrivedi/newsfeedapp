@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:news_feed_app/components/news_card.dart';
 import 'package:news_feed_app/controllers/auth_controller.dart';
 import 'package:news_feed_app/controllers/fetch_news_controller.dart';
+import 'package:news_feed_app/pages/article_page.dart';
 import '../models/article.dart';
 import '../models/user.dart';
 
@@ -27,11 +28,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(builder: (_) {
       return Scaffold(
-        appBar: AppBar(centerTitle: true, title: const Text('Your News Feed')),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            title: const Text(
+              'Your News Feed',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                fontFamily: 'Horizon',
+              ),
+            )),
         body: Column(children: [
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: _chips(User.me?.categories ?? [])),
           Expanded(
             child: GetBuilder<FetchNewsController>(
               builder: (ctrl) {
@@ -41,15 +51,28 @@ class _HomePageState extends State<HomePage> {
                   return const Center(child: Text('Error loading news'));
                 } else {
                   return ListView.builder(
-                    itemCount: ctrl.news.length,
+                    itemCount: ctrl.news.length + 1,
                     itemBuilder: (context, index) {
-                      Article article = ctrl.news[index];
-                      return NewsCard(
-                          title: article.title,
-                          description: article.description,
-                          urlToImage: article.urlToImage,
-                          author: article.author,
-                          publishedAt: article.publishedAt.toString());
+                      if (index == 0) {
+                        return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: _chips(User.me?.categories ?? []));
+                      }
+                      Article article = ctrl.news[index - 1];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: NewsCard(
+                            onPressed: () {
+                              Get.to(() => ArticlePage(
+                                    article: article,
+                                  ));
+                            },
+                            title: article.title,
+                            description: article.description,
+                            urlToImage: article.urlToImage,
+                            author: article.author,
+                            publishedAt: article.publishedAt.toString()),
+                      );
                     },
                   );
                 }

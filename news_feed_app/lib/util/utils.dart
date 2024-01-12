@@ -22,3 +22,12 @@ var listOfCategories = [
   "Sports",
   "Technology"
 ];
+
+String getCountryCode(String countryName) {
+  for (var country in listOfCountry) {
+    if (country['name']!.toLowerCase() == countryName.toLowerCase()) {
+      return country['code']!;
+    }
+  }
+  return 'CA'; // Default to 'ca' if the country name is not found
+}
