@@ -32,7 +32,7 @@ class UserQueries {
   /// Create user profile.
   /// [Params] name, userCountry, categories
   // */
-  Future<void> createUser(
+  Future<dynamic> createUser(
       {String? name, String? userCountry, List<String>? categories}) async {
     User? authUser = FirebaseAuth.instance.currentUser;
 
@@ -46,6 +46,8 @@ class UserQueries {
     try {
       log(this, 'Creating user...');
       await ref.doc(authUser?.uid).set(user.toJson());
+      // await authUser?.reload();
+      return authUser?.uid;
     } catch (err) {
       log(this, 'Unable to create user profile. Error: $err');
     }

@@ -4,6 +4,7 @@ import 'package:news_feed_app/queries/user_queries.dart';
 import 'package:news_feed_app/util/utils.dart';
 
 import '../config/current_state.dart';
+import '../models/user.dart';
 import '../pages/home_page.dart';
 import '../util/log.dart';
 
@@ -42,9 +43,11 @@ class CreateProfileController extends GetxController {
       log(this, 'Creating profile...');
 
       log(this, 'Creating user profile...');
-      await UserQueries().createUser(
+      var uid = await UserQueries().createUser(
           name: name.text, userCountry: country.text, categories: selected);
-
+      var user = await UserQueries().getUser(uid);
+      User.me = user;
+      createState.refresh(StateAs.ok);
       Get.offAll(() => const HomePage());
     } catch (err) {
       log(this, 'Unable to create profile. Error: $err');

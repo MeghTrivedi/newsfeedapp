@@ -20,7 +20,7 @@ class FetchNewsController extends GetxController {
   }
 
   Future<void> fetchNews(
-      {String category = '', String type = 'top-headlines'}) async {
+      {String category = 'General', String type = 'top-headlines'}) async {
     if (category == '') {
       category = User.me?.categories?.first;
     }

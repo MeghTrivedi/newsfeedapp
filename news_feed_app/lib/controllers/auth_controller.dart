@@ -40,6 +40,10 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<User?> getUser() async {
+    return FirebaseAuth.instance.currentUser;
+  }
+
   bool setConfirmPassword(String password) {
     _confirmPassword.text = password.trim();
 
