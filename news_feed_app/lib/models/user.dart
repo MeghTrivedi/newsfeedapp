@@ -3,7 +3,7 @@ class User {
   final String email;
   final String? name;
   final String? userCountry;
-  final List<String>? categories;
+  final List<dynamic>? categories;
 
   User(
       {required this.uid,
@@ -11,6 +11,17 @@ class User {
       this.name,
       this.userCountry,
       this.categories});
+
+  // make a from JSON to User object
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      uid: json['uid'],
+      email: json['email'],
+      name: json['name'],
+      userCountry: json['userCountry'],
+      categories: json['categories'],
+    );
+  }
 
   // Make into JSON object
   Map<String, dynamic> toJson() => {

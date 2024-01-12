@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user.dart' as model;
 import '../util/log.dart';
@@ -9,6 +8,30 @@ class UserQueries {
 
   CollectionReference ref = FirebaseFirestore.instance.collection(USER);
 
+  Future<model.User> getUser(String userId) async {
+    try {
+      log(this, 'Getting user...');
+      DocumentSnapshot doc = await ref.doc(userId).get();
+
+      if (doc.exists) {
+        log(this, 'User found');
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        model.User myUser = model.User.fromJson(userData);
+        return myUser;
+      } else {
+        log(this, 'User not found');
+        throw Exception('User not found');
+      }
+    } catch (err) {
+      log(this, 'Unable to get user. Error: $err');
+      throw Exception('Unable to get user');
+    }
+  }
+
+  //**
+  /// Create user profile.
+  /// [Params] name, userCountry, categories
+  // */
   Future<void> createUser(
       {String? name, String? userCountry, List<String>? categories}) async {
     User? authUser = FirebaseAuth.instance.currentUser;

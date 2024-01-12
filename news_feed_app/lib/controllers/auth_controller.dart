@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:news_feed_app/pages/email_verification_page.dart';
+import 'package:news_feed_app/pages/landing_page.dart';
 
 import '../config/current_state.dart';
-// import '../models/user.dart' as model;
+import '../models/user.dart' as model;
 import '../pages/create_profile_page.dart';
+import '../pages/home_page.dart';
+import '../queries/user_queries.dart';
 import '../util/log.dart';
 
 class AuthController extends GetxController {
@@ -90,20 +93,39 @@ class AuthController extends GetxController {
 
     if (_user != null) {
       clearInputFields();
-
-      // check if email is verified
-      if (_user?.emailVerified ?? false) {
+      model.User? userData;
+      try {
+        log(this, '_user!.uid: ${_user!.uid}');
+        userData = await UserQueries().getUser(_user!.uid);
+      } catch (err) {
         authState.asOk();
-        Get.offAll(() => const CreateProfilePage());
+        log(this, 'Failed to get user. Error: $err');
+      }
+
+      // Check if user data exists
+      if (userData != null) {
+        authState.asOk();
+        Get.offAll(() => HomePage());
       } else {
-        if (_user?.email == null) {
+        // check if email is verified
+        if (_user?.emailVerified ?? false) {
           authState.asOk();
-          log(this, 'User email is null');
+          Get.offAll(() => const CreateProfilePage());
         } else {
-          authState.asOk();
-          Get.offAll(() => EmailVerificationPage(email: _user?.email));
+          if (_user?.email == null) {
+            authState.asOk();
+            log(this, 'User email is null');
+          } else {
+            authState.asOk();
+            Get.offAll(() => EmailVerificationPage(email: _user?.email));
+          }
         }
       }
+    } else {
+      clearInputFields();
+      authState.asOk();
+      Get.offAll(() => const LandingPage());
+      log(this, 'Auth Controller, user is not signed in');
     }
   }
 
@@ -163,6 +185,25 @@ class AuthController extends GetxController {
     } catch (err) {
       Get.back();
       log(this, 'Failed to sign up. Error: $err');
+    }
+    authState.refresh(StateAs.ok);
+  }
+
+  Future<void> login() async {
+    try {
+      authState.refresh(StateAs.loading);
+      log(this, 'Logging in...');
+      _userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text.trim(), password: _password.text.trim());
+      if (_userCredential?.user?.uid == null) {
+        throw Exception('Could not get user. User may not exist');
+      }
+      log(this, 'Email: ${_email.text.trim()}');
+      clearInputFields();
+      update();
+      await init();
+    } catch (err) {
+      log(this, 'Failed to login. Error: $err');
     }
     authState.refresh(StateAs.ok);
   }
