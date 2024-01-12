@@ -16,6 +16,7 @@ class NewsFeedInputField extends StatefulWidget {
     this.maxLength = 64,
     this.initialText,
     this.controller,
+    this.borderWidth = 3,
     this.hintTextSize = 16,
     this.disable = false,
     this.textCapitalization = TextCapitalization.none,
@@ -39,6 +40,7 @@ class NewsFeedInputField extends StatefulWidget {
     this.maxLength = 512,
     this.showCounter = true,
   })  : hideText = false,
+        borderWidth = 3,
         super(key: key);
 
   const NewsFeedInputField.obscure({
@@ -53,6 +55,7 @@ class NewsFeedInputField extends StatefulWidget {
     this.disable = false,
     this.textCapitalization = TextCapitalization.none,
   })  : maxLength = 512,
+        borderWidth = 3,
         showCounter = false,
         hideText = true,
         minLines = 1,
@@ -72,6 +75,7 @@ class NewsFeedInputField extends StatefulWidget {
   final bool disable;
   final TextCapitalization textCapitalization;
   final bool showCounter;
+  final double borderWidth;
 
   /// [Return] true if there is an error.
   final bool Function(String) onChanged;
@@ -159,8 +163,8 @@ class _NewsFeedInputFieldState extends State<NewsFeedInputField> {
       ? _errorBorder()
       : OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide:
-              const BorderSide(width: 3, color: Colors.deepPurpleAccent));
+          borderSide: BorderSide(
+              width: widget.borderWidth, color: Colors.deepPurpleAccent));
 
   _okayBorder() => _hasError || widget.isError
       ? _errorBorder()

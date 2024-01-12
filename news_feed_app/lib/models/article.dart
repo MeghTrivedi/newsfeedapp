@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:news_feed_app/util/log.dart';
-
 /// Function that takes a JSON string str, decodes it into a Dart object,
 /// and then maps each article in the
 /// 'articles' list to an Article object.

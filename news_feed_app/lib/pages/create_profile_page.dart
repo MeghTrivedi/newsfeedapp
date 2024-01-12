@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:news_feed_app/components/news_feed_input_field.dart';
 import 'package:news_feed_app/controllers/create_profile_controller.dart';
 
+import '../util/utils.dart';
+
 class CreateProfilePage extends StatefulWidget {
   const CreateProfilePage({super.key});
 
@@ -83,20 +85,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     );
   }
 
-  Color _colorGeneratorBasedOnIndex(int index) {
-    final colors = [
-      Colors.red,
-      Colors.green,
-      Colors.blue,
-      Colors.yellow,
-      Colors.orange,
-      Colors.pink,
-      Colors.purple,
-    ].map((e) => e.withOpacity(0.5)).toList();
-
-    return colors[index % colors.length];
-  }
-
   _listOfChipsWidget() {
     return GetBuilder<CreateProfileController>(builder: (ctrl) {
       return Padding(
@@ -121,7 +109,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           final isSelected =
               _selected.contains(profileController.categories[index]);
           return ChoiceChip(
-            selectedColor: _colorGeneratorBasedOnIndex(index),
+            selectedColor: colorGeneratorBasedOnIndex(index),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
               side: const BorderSide(color: Colors.deepPurpleAccent),

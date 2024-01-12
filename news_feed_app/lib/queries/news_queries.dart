@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'package:news_feed_app/models/article.dart';
 import 'package:news_feed_app/util/log.dart';
@@ -31,6 +30,7 @@ class NewsQueries {
       }
     } catch (err) {
       log(this, 'Unable to fetch news. Error: $err');
+      return null;
     }
   }
 }

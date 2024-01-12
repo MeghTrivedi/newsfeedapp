@@ -19,15 +19,16 @@ class FetchNewsController extends GetxController {
     fetchNews();
   }
 
-  Future<void> fetchNews({String category = ''}) async {
+  Future<void> fetchNews(
+      {String category = '', String type = 'top-headlines'}) async {
     if (category == '') {
       category = User.me?.categories?.first;
     }
     try {
       currentState.refresh(StateAs.loading);
       String countryCode = getCountryCode(User.me?.userCountry ?? '');
-      var fetchedNews = await newsQueries.fetch(
-          category, countryCode, 'top-headlines', page.value);
+      var fetchedNews =
+          await newsQueries.fetch(category, countryCode, type, page.value);
       if (fetchedNews != null) {
         news.clear(); // clear old news.
         news.addAll(fetchedNews);

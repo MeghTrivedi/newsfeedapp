@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 var listOfCountry = [
   {
     "name": "Canada",
@@ -30,4 +32,18 @@ String getCountryCode(String countryName) {
     }
   }
   return 'CA'; // Default to 'ca' if the country name is not found
+}
+
+Color colorGeneratorBasedOnIndex(int index) {
+  final colors = [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+    Colors.orange,
+    Colors.pink,
+    Colors.purple,
+  ].map((e) => e.withOpacity(0.5)).toList();
+
+  return colors[index % colors.length];
 }

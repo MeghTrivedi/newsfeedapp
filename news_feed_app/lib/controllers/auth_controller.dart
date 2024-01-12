@@ -186,6 +186,7 @@ class AuthController extends GetxController {
     } catch (err) {
       Get.back();
       log(this, 'Failed to sign up. Error: $err');
+      Get.snackbar('Error', 'Could not sign up. $err');
     }
     authState.refresh(StateAs.ok);
   }
@@ -205,7 +206,15 @@ class AuthController extends GetxController {
       await init();
     } catch (err) {
       log(this, 'Failed to login. Error: $err');
+      Get.snackbar('Error', 'Could not login. $err');
     }
     authState.refresh(StateAs.ok);
+  }
+
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+    _user = null;
+    clearInputFields();
+    Get.offAll(() => const LandingPage());
   }
 }
