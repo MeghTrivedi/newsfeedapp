@@ -86,7 +86,8 @@ class _SearchPageState extends State<SearchPage> {
                             itemBuilder: (context, index) {
                               Article article = controller.news[index];
                               return NewsCard(
-                                onPressed: () => ArticlePage(article: article),
+                                onPressed: () =>
+                                    Get.to(() => ArticlePage(article: article)),
                                 title: article.title,
                                 description: article.description,
                                 urlToImage: article.urlToImage,
