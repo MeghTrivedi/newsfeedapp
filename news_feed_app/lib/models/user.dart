@@ -5,6 +5,8 @@ class User {
   final String? userCountry;
   final List<dynamic>? categories;
 
+  static User? me;
+
   User(
       {required this.uid,
       required this.email,

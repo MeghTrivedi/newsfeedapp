@@ -104,8 +104,9 @@ class AuthController extends GetxController {
 
       // Check if user data exists
       if (userData != null) {
+        model.User.me = userData;
         authState.asOk();
-        Get.offAll(() => HomePage());
+        Get.offAll(() => const HomePage());
       } else {
         // check if email is verified
         if (_user?.emailVerified ?? false) {

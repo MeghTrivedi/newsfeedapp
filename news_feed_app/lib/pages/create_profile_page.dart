@@ -123,7 +123,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           return ChoiceChip(
             selectedColor: _colorGeneratorBasedOnIndex(index),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(20.0),
               side: const BorderSide(color: Colors.deepPurpleAccent),
             ),
             backgroundColor: Colors.white,

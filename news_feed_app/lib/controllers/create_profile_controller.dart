@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_feed_app/queries/user_queries.dart';
+import 'package:news_feed_app/util/utils.dart';
 
 import '../config/current_state.dart';
 import '../pages/home_page.dart';
@@ -9,15 +10,7 @@ import '../util/log.dart';
 class CreateProfileController extends GetxController {
   final name = TextEditingController();
   final country = TextEditingController();
-  final List<String> categories = [
-    "Business",
-    "Entertainment",
-    "General",
-    "Health",
-    "Science",
-    "Sports",
-    "Technology"
-  ];
+  final List<String> categories = listOfCategories;
 
   late final createState = CurrentState(() => update());
 
@@ -52,7 +45,7 @@ class CreateProfileController extends GetxController {
       await UserQueries().createUser(
           name: name.text, userCountry: country.text, categories: selected);
 
-      Get.offAll(() => HomePage());
+      Get.offAll(() => const HomePage());
     } catch (err) {
       log(this, 'Unable to create profile. Error: $err');
       Get.snackbar('Error', 'Could not create profile');
